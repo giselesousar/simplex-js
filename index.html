@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simplex</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <main>
+    <h1 class="titulo display-4 text-center font-weight-light text-muted">
+      Simplex
+    </h1>
+
+    <div class="card backgrounCard">
+      <div class="card-body backgrounCard mx-auto">
+        <div class="col" id="section1">
+          <div class="row-sm">
+            
+          </div>
+          <div class="row-sm" >
+              <form>
+                <div class="form-group">
+                    <label for="usr">Número de variáveis</label>
+                    <input type="number" min="0" class="form-control" id="variaveis">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Número de restrições</label>
+                    <input type="number" min="0" class="form-control" id="restricoes">
+                </div>
+                <button onclick="onSubmit()" type="button" class="btn btn-danger btn-block">Continuar</button>
+            </form>
+          </div>
+         
+        </div>
+        <div class="col d-none" id="section2">
+            <div class="row-sm">
+                <h3>Inserir dados</h3>
+            </div>
+            <div class="row-sm" >
+                <form>
+                    <div class="form-group form-inline">
+                        <div class="radio mr-2">
+                            <label><input type="radio" value="0" name="optradio" checked>Maximizar</label>
+                        </div>
+                        <div class="radio mr-2">
+                            <label><input type="radio"  value="1" name="optradio">Minimizar</label>
+                        </div>
+                    </div>
+                    <div class="funcao-objetivo col">
+                        <div class="row mb-4">
+                            <span>Função: </span>
+                            <div id="variaveis-func-obj" class="d-inline"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span>Sujeito a:</span>
+                            </div>    
+                                <div id="restricoes-func" class="col-md-10"></div>
+                        </div>
+                    </div>
+                  <button onclick="" type="button" class="btn btn-danger btn-block">Solução</button>
+              </form>
+            </div>
+
+      </div>
+    </div>
+    </main>
+  </div>
+
+  <script>
+      function onSubmit(){
+          /**const radios = document.getElementsByName('optradio');
+          let m = 0;
+          radios.forEach(r => {
+              if(r.checked){
+                m = r.value;
+              }
+          });*/
+          const variaveis = document.getElementById('variaveis').value;
+          const restricoes = document.getElementById('restricoes').value;
+
+          //criando função objetivo
+          for(var i = 0; i < variaveis; i++){
+            //criando inputs
+            var input = document.createElement("input");
+            input.setAttribute('type', 'number');
+            document.getElementById('variaveis-func-obj').appendChild(input);
+            //criando variaveis
+            var span = document.createElement("span");
+            span.appendChild(document.createTextNode(`x${i+1}`));
+            document.getElementById('variaveis-func-obj').appendChild(span);
+          }
+
+          //criando restricoes
+          for(var i = 0; i < restricoes; i++){
+              const container = document.createElement('div');
+              container.setAttribute('class', 'row mb-4');
+              for(var j = 0; j < variaveis; j++){
+                //criando inputs
+                var input = document.createElement("input");
+                input.setAttribute('type', 'number');
+                container.appendChild(input);
+                //criando variaveis
+                var span = document.createElement("span");
+                span.appendChild(document.createTextNode(`x${j+1}`));
+                container.appendChild(span);
+              }
+
+            //select
+            const selectDiv = document.createElement('div');
+            selectDiv.setAttribute('class', 'form-group');
+            
+            const select = document.createElement('select');
+            select.setAttribute('class', 'form-control');
+            
+            const op1 = document.createElement('option');
+            op1.setAttribute('value', '0');
+            op1.appendChild(document.createTextNode('op1'));
+            select.appendChild(op1);
+            
+            const op2 = document.createElement('option');
+            op2.setAttribute('value', '0');
+            op2.appendChild(document.createTextNode('op2'));
+            select.appendChild(op2);
+            
+            const op3 = document.createElement('option');
+            op3.setAttribute('value', '0');
+            op3.appendChild(document.createTextNode('op3'));
+            select.appendChild(op3);
+
+            selectDiv.appendChild(select);
+
+            container.appendChild(selectDiv);
+           
+            //campo para bi
+            const b = document.createElement('input');
+            b.setAttribute('type', 'number');
+            container.appendChild(b);
+
+            document.getElementById('restricoes-func').appendChild(container);
+          }
+
+          //etapa 1 para etapa 2
+          document.getElementById('section1').classList.add('d-none');
+          document.getElementById('section2').classList.remove('d-none');
+      }
+  </script>
+  <script src="simplex.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+</body>
+
+</html>
