@@ -12,7 +12,7 @@
   <div class="container">
     <main>
     <h1 class="titulo display-4 text-center font-weight-light text-muted">
-      Simplex
+      Método Simplex
     </h1>
 
     <div class="card backgrounCard">
@@ -38,11 +38,11 @@
         </div>
         <div class="col d-none" id="section2">
             <div class="row-sm">
-                <h3>Inserir dados</h3>
+                <h3>Inserir dados:</h3>
             </div>
             <div class="row-sm" >
                 <form>
-                    <div class="form-group form-inline">
+                    <div class="form-group form-inline d-flex justify-content-center"">
                         <div class="radio mr-2">
                             <label><input type="radio" value="0" name="optradio" checked>Maximizar</label>
                         </div>
@@ -50,19 +50,21 @@
                             <label><input type="radio"  value="1" name="optradio">Minimizar</label>
                         </div>
                     </div>
-                    <div class="funcao-objetivo col">
-                        <div class="row mb-4">
+                    <div class="col">
+                        <div class="row mb-5 mt-2 d-flex justify-content-center">
                             <span>Função: </span>
-                            <div id="variaveis-func-obj" class="d-inline"></div>
+                            <div id="variaveis-func-obj" class="form-inline"></div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-4 d-flex justify-content-center">
                             <div class="col-md-2">
                                 <span>Sujeito a:</span>
                             </div>    
                                 <div id="restricoes-func" class="col-md-10"></div>
                         </div>
                     </div>
-                  <button onclick="" type="button" class="btn btn-danger btn-block">Solução</button>
+                  <div class="d-flex justify-content-center">
+                    <button onclick="" type="button" class="btn btn-danger">Calcular solução</button>
+                  </div>
               </form>
             </div>
 
@@ -85,61 +87,62 @@
 
           //criando função objetivo
           for(var i = 0; i < variaveis; i++){
+            const div = document.createElement('div');
+            div.setAttribute('class', 'form-group');
             //criando inputs
             var input = document.createElement("input");
             input.setAttribute('type', 'number');
-            document.getElementById('variaveis-func-obj').appendChild(input);
+            input.setAttribute('class', 'form-control ml-2 mr-2');
+            input.setAttribute('style', 'width: 70px;')
+            div.appendChild(input);
             //criando variaveis
             var span = document.createElement("span");
             span.appendChild(document.createTextNode(`x${i+1}`));
-            document.getElementById('variaveis-func-obj').appendChild(span);
+            if(i+1 != variaveis){
+                  span.appendChild(document.createTextNode(' + '))
+            }
+            div.appendChild(span);
+
+            document.getElementById('variaveis-func-obj').appendChild(div)
           }
 
           //criando restricoes
           for(var i = 0; i < restricoes; i++){
               const container = document.createElement('div');
               container.setAttribute('class', 'row mb-4');
+              const formInline = document.createElement('div');
+              formInline.setAttribute('class', 'form-inline');
+              const formGroup = document.createElement('div');
+              formGroup.setAttribute('class', 'form-group');
+
               for(var j = 0; j < variaveis; j++){
                 //criando inputs
                 var input = document.createElement("input");
                 input.setAttribute('type', 'number');
-                container.appendChild(input);
+                input.setAttribute('class', 'form-control ml-2 mr-2');
+                input.setAttribute('style', 'width: 70px;')
+                formGroup.appendChild(input);
                 //criando variaveis
                 var span = document.createElement("span");
                 span.appendChild(document.createTextNode(`x${j+1}`));
-                container.appendChild(span);
+                if(j+1 != variaveis){
+                  span.appendChild(document.createTextNode(' + '))
+                }
+                formGroup.appendChild(span);
               }
 
-            //select
-            const selectDiv = document.createElement('div');
-            selectDiv.setAttribute('class', 'form-group');
-            
-            const select = document.createElement('select');
-            select.setAttribute('class', 'form-control');
-            
-            const op1 = document.createElement('option');
-            op1.setAttribute('value', '0');
-            op1.appendChild(document.createTextNode('op1'));
-            select.appendChild(op1);
-            
-            const op2 = document.createElement('option');
-            op2.setAttribute('value', '0');
-            op2.appendChild(document.createTextNode('op2'));
-            select.appendChild(op2);
-            
-            const op3 = document.createElement('option');
-            op3.setAttribute('value', '0');
-            op3.appendChild(document.createTextNode('op3'));
-            select.appendChild(op3);
 
-            selectDiv.appendChild(select);
-
-            container.appendChild(selectDiv);
+            formGroup.appendChild(document.createTextNode(' ='));
            
             //campo para bi
             const b = document.createElement('input');
             b.setAttribute('type', 'number');
-            container.appendChild(b);
+            b.setAttribute('class', 'form-control ml-2 mr-2');
+            b.setAttribute('style', 'width: 70px;')
+            formGroup.appendChild(b);
+
+            formInline.appendChild(formGroup);
+            container.appendChild(formInline);
 
             document.getElementById('restricoes-func').appendChild(container);
           }
