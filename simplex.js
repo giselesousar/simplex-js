@@ -1,21 +1,8 @@
 /*
-O P.P.L Original já está na forma padrão (somente a Fase II será implementada)
-
+// Exemplo:
 const dados = {
-    linhas: 0, //quantidade de restricoes + 1
-    colunas: 0, //quantidade de variaveis + 1
-    tabela: null, //tablô
-    valorZ: null,
-    vetorSolucao: null, //tamanho = colunas - linhas
-    textoSolucao: ''
-}
-
-*/
-
-// exemplo
-const dados = {
-    linhas: 4,  // 3 restricoes + funcao objetivo
-    colunas: 6, // 5 variaveis + coluna b
+    linhas: 4,  // 3 restricoes + 1 (funcao objetivo)
+    colunas: 6, // 5 variaveis + 1 (coluna b)
     tabela: [
         [1.0, 0.0, 1.0, 0.0, 0.0, 3.0],
         [0.0, 1.0, 0.0, 1.0, 0.0, 4.0],
@@ -24,6 +11,16 @@ const dados = {
     ],
     valorZ: null, //esperado: -21
     vetorSolucao: null, //esperado: [3, 3]
+    textoSolucao: ''
+};
+*/
+
+const dados = {
+    linhas: 0, // quantidade de restricoes + 1
+    colunas: 0, // quantidade de variaveis + 1
+    tabela: null, // tablô
+    valorZ: null,
+    vetorSolucao: null, // tamanho = colunas - linhas
     textoSolucao: ''
 };
 
@@ -93,8 +90,6 @@ function preencherDados(){
     array.push(0); //Z
     dados.tabela.push(array);
 
-    exibirTabelaAtual();
-    
 }
 
 /*
@@ -102,28 +97,17 @@ Objetivo: Calcular a solição ótima do PPL pelo método simplex por meio do Ta
 Retorno: null
 */
 function calcularSolucao(){
-    //getValues();
-    //preencherDados();
-    exibirTabelaAtual();
-    
+
+    preencherDados();
+
     while(!verificarSeSolucaoOtima()){
 
         if(!realizaPivoteamento()){
             break;
         }
-        
     }
 
-    if(verificarSeSolucaoOtima()){
-        dados.textoSolucao = 'Solução ótima encontarada!';
-        dados.vetorSolucao = [3,3];
-        dados.valorZ = dados.tabela[dados.linhas-1][dados.colunas-1]*(-1);
-        exibirResultado();
-    
-    } else {
-        dados.textoSolucao = 'Solução não limitada!';
-        exibirResultado();
-    }
+    exibirTabelaAtual();
 }
 
 /*
@@ -147,9 +131,8 @@ function verificarSeSolucaoOtima() {
             colunaDoMin = i;
         }
         
-        //console.log(min);
     }
-    //console.log(colunaDoMin);
+
     if(colunaDoMin === -1) return true;
     
     colunaDoPivo = colunaDoMin;
