@@ -19,6 +19,7 @@ const dados = {
     linhas: 0, // quantidade de restricoes + 1
     colunas: 0, // quantidade de variaveis + 1
     tabela: null, // tablô
+    vetorBase: null, // contém os índices das variáveis básicas; tamanho = colunas - linhas
     valorZ: null,
     vetorSolucao: null, // tamanho = colunas - linhas
     textoSolucao: ''
@@ -89,6 +90,12 @@ function preencherDados(){
     }
     array.push(0); //Z
     dados.tabela.push(array);
+
+    //preenchendo vetor base
+    dados.vetorBase = new Array();
+    for (var i = dados.colunas - dados.linhas; i <= dados.linhas; i ++){
+        dados.vetorBase.push(i);
+    }
 
 }
 
@@ -208,6 +215,10 @@ function existeLinhaPivo(){
     if(linhaDoMin === -1) return false;
 
     linhaDoPivo = linhaDoMin;
+
+    //atualizando base
+    dados.vetorBase[linhaDoPivo] = colunaDoPivo;
+
     return true;
 }
 
@@ -254,22 +265,19 @@ function exibirTabelaAtual(){
         if(i == dados.linhas - 1){
             th.appendChild(document.createTextNode('Funcao'));
         }else{
-            th.appendChild(document.createTextNode('?'));
+            th.appendChild(document.createTextNode(`x${dados.vetorBase[i] + 1}`));
         }
         tr.appendChild(th);
 
         for (var j = 0; j < dados.tabela[i].length; j++){
 
-
             const td = document.createElement('td');
-            td.appendChild(document.createTextNode(dados.tabela[i][j]));
+            if(i == dados.linhas - 1 && j == dados.colunas - 1){
+                td.appendChild(document.createTextNode(dados.tabela[i][j]*-1));
+            }else{
+                td.appendChild(document.createTextNode(dados.tabela[i][j]));
+            }
             tr.appendChild(td);
-
-            console.log(
-                'Linha: ' + i,
-                'Coluna:' + j,
-                'Valor: ' + dados.tabela[i][j]
-            )
         }
         tableBody.appendChild(tr);
     }
