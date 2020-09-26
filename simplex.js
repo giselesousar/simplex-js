@@ -83,21 +83,15 @@ function preencherDados(){
     }
     array.push(0); //Z
     dados.tabela.push(array);
+
+    exibirTabelaAtual();
     
-    for( var i = 0; i < dados.tabela.length; i++){
-        for (var j = 0; j < dados.tabela[i].length; j++){
-            console.log(
-                'Linha: ' + i,
-                'Coluna:' + j,
-                'Valor: ' + dados.tabela[i][j]
-            )
-        }
-    }
 }
 
 //Calcula a solição ótima do PPL pelo método simplex por meio do Tablô
 function calcularSolucao(){
-    getValues();
+    //preencherDados();
+    exibirTabelaAtual();
 
 }
 
@@ -131,4 +125,59 @@ function encontrarLinhaPivo(){
 function exibirResultado(){
     //renderizar tablô atual
     
+}
+
+function exibirTabelaAtual(){
+
+    document.getElementById('section3').classList.remove('d-none');
+
+    const tableHead = document.getElementById('table-head');
+    const tableBody = document.getElementById('table-body');
+
+    tableHead.innerHTML = '';
+    tableBody.innerHTML = '';
+
+    const th = document.createElement('th');
+    th.setAttribute('scope', 'col');
+    tableHead.appendChild(document.createTextNode('Base'))
+
+    for (var i = 0; i < dados.tabela[0].length; i++){
+
+        const th = document.createElement('th');
+            th.setAttribute('scope', 'col');
+            if(i == dados.colunas - 1){
+                th.appendChild(document.createTextNode('b'));
+            }else{
+                th.appendChild(document.createTextNode(`x${i+1}`));
+            }
+
+            tableHead.appendChild(th);
+    }
+
+    for( var i = 0; i < dados.tabela.length; i++){
+        const tr = document.createElement('tr');
+        const th = document.createElement('th');
+        th.setAttribute('scope', 'row');
+        if(i == dados.linhas - 1){
+            th.appendChild(document.createTextNode('Funcao'));
+        }else{
+            th.appendChild(document.createTextNode('?'));
+        }
+        tr.appendChild(th);
+
+        for (var j = 0; j < dados.tabela[i].length; j++){
+
+
+            const td = document.createElement('td');
+            td.appendChild(document.createTextNode(dados.tabela[i][j]));
+            tr.appendChild(td);
+
+            console.log(
+                'Linha: ' + i,
+                'Coluna:' + j,
+                'Valor: ' + dados.tabela[i][j]
+            )
+        }
+        tableBody.appendChild(tr);
+    }
 }
