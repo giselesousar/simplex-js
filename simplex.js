@@ -2,13 +2,31 @@
 O P.P.L Original já está na forma padrão (somente a Fase II será implementada)
 
 const dados = {
-    linhas: 0,
-    colunas: 0,
-    tabela: null,
+    linhas: 0, //quantidade de restricoes + 1
+    colunas: 0, //quantidade de variaveis + 1
+    tabela: null, //tablô
+    valorZ: null,
+    vetorSolucao: null, //tamanho = colunas - linhas
+    textoSolucao: ''
 }
 
 count = linhas - 1;
 */
+
+// exemplo
+const dados = {
+    linhas: 4, // 3 restricoes + funcao objetivo
+    colunas: 6, // 5 variaveis + coluna b
+    tabela: [
+        [1, 0, 1, 0, 0, 3],
+        [0, 1, 0, 1, 0, 4],
+        [1, 2, 0, 0, 1, 9],
+        [-5, -2, 0, 0, 0, 0]
+    ],
+    valorZ: null, //esperado: -21
+    vetorSolucao: null, //esperado: [3, 3]
+    textoSolucao: ''
+}
 
 // Exibe na tela o Problema de progrmação linear inserido
 function exibirPPL(){
