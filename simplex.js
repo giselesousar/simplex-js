@@ -36,6 +36,63 @@ function exibirPPL(){
 // Preenche o "Tablô" inicial com os dados inseridos
 function preencherDados(){
 
+    dados.colunas = Number(document.getElementById('variaveis').value) + 1;
+    dados.linhas = Number(document.getElementById('restricoes').value) + 1;
+
+    //criando tabela
+    dados.tabela = new Array();
+
+    //preenchendo restricoes
+    for (var i = 0; i < dados.linhas - 1; i++){
+        const inputsRestricao = document.getElementsByName(`restricao${i}`);
+        var vetor = new Array();
+        for (var j = 0; j < inputsRestricao.length; j++){
+            vetor.push(Number(inputsRestricao[j].value) || 0);
+        }
+        dados.tabela.push(vetor);
+        vetor = null;
+    }
+    
+    //preenchendo última coluna
+    const colunaB = document.getElementsByName('colunaB');
+    for (var i = 0; i < colunaB.length; i++){
+        dados.tabela[i].push(Number(colunaB[i].value) || 0);
+    }
+    
+    
+    //preenchendo funcao objetivo
+
+    const funcaoObjetivo = document.getElementsByName('inputFuncaoObj');
+    //verificando se MAX ou MIN
+    var obj = 0;
+    const radios = document.getElementsByName('optradio');
+          radios.forEach(r => {
+              if(r.checked){
+                obj = r.value;
+              }
+          });
+
+    var array = new Array();
+    for (var i = 0; i < funcaoObjetivo.length; i++){
+        if(obj == 0){ //maximização
+            array.push((Number(funcaoObjetivo[i].value) || 0) * -1);
+        }else{ //minimização
+            array.push(Number(funcaoObjetivo[i].value) || 0);
+        }
+        
+    }
+    array.push(0); //Z
+    dados.tabela.push(array);
+    
+    for( var i = 0; i < dados.tabela.length; i++){
+        for (var j = 0; j < dados.tabela[i].length; j++){
+            console.log(
+                'Linha: ' + i,
+                'Coluna:' + j,
+                'Valor: ' + dados.tabela[i][j]
+            )
+        }
+    }
 }
 
 //Calcula a solição ótima do PPL pelo método simplex por meio do Tablô
@@ -72,5 +129,6 @@ function encontrarLinhaPivo(){
 
 // Exibe na tela a solução encontrada para o P.P.L
 function exibirResultado(){
-
+    //renderizar tablô atual
+    
 }
