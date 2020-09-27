@@ -1,5 +1,7 @@
 /*
-// Exemplo:
+// Exemplos:
+
+1º Caso: Solução Ótima
 const dados = {
     linhas: 4,  // 3 restricoes + 1 (funcao objetivo)
     colunas: 6, // 5 variaveis + 1 (coluna b)
@@ -13,6 +15,7 @@ const dados = {
     vetorSolucao: null, //esperado: [3, 3]
     textoSolucao: ''
 };
+
 */
 
 const dados = {
@@ -100,6 +103,46 @@ function preencherDados(){
 }
 
 /*
+Objetivo: Verificar se existem infinitas soluções. Para isso, é preciso verificar
+se ao menos um coeficiente da função objetivo pertencente a uma coluna representada
+por uma variável não básica é nulo.
+Retorno: Boolean.
+*/
+function verificaSeInfinito(){
+    eVariavelBasica = false;
+
+    for(j = 0; j < dados.colunas-1; j++){
+
+        // Verificando se a variável em questão (o índice atual da coluna) não está entre
+        // as variáveis básicas (entre os índices presentes no vetor de variáveis básicas):
+        for(i = 0; i < dados.linhas-1; i++){
+            if(j == dados.vetorBase[i]) {
+                eVariavelBasica = true;
+                break;
+            }
+        }
+
+        if(!eVariavelBasica){
+            // Verificando se o coeficiente da função objetivo na coluna dessa variável não básica
+            // é nulo.
+            if(dados.tabela[dados.linhas-1][j] == 0){
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+/*
+Objetivo: Preencher o vetorSolucao com o ponto de ótimo.
+Retorno: null.
+*/
+function preencherVetorSolucao(){
+
+}
+
+/*
 Objetivo: Calcular a solição ótima do PPL pelo método simplex por meio do Tablô
 Retorno: null
 */
@@ -107,13 +150,29 @@ function calcularSolucao(){
 
     preencherDados();
 
+    var concluido = false;
+
     while(!verificarSeSolucaoOtima()){
 
         if(!realizaPivoteamento()){
+            dados.textoSolucao = 'Solução ilimitada';
+            concluido = true;
             break;
         }
     }
 
+    if(!concluido){
+        if(verificaSeInfinito()){
+            dados.textoSolucao = 'Soluções Infinitas';
+        } else {
+            dados.textoSolucao = 'Solução Ótima';
+        }
+
+        dados.vetorSolucao = preencherVetorSolucao();
+        dados.valorZ = dados.tabela[dados.linhas-1][dados.colunas-1]*(-1);
+    }
+
+    console.log(dados.textoSolucao);
     exibirTabelaAtual();
 }
 
