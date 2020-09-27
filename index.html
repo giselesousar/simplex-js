@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <div class="container" style="display: flex; justify-content: center;">
+  <div class="container" style="display: flex; justify-content: center; margin-bottom: 20px;">
     <main>
     <h1>
       Método Simplex
@@ -87,16 +87,17 @@
                 <strong>Status: </strong>
                 <div id='container-status'>
                 </div>
-      
-                <strong>A solução ótima é </strong>
-                <div id='container-z'>
+                <div id="solucao">
+                  <strong>A solução ótima é </strong>
+                  <div id='container-z'>
+                  </div>
+                
+                  <strong>Variáveis básicas: </strong><br/>
+                  <div id='container-basicas'></div>
+                
+                  <strong>Variáveis não-básicas: </strong><br/>
+                  <div id='container-nao-basicas'></div>
                 </div>
-              
-                <strong>Variáveis básicas: </strong><br/>
-                <div id='container-basicas'></div>
-              
-                <strong>Variáveis não-básicas: </strong><br/>
-                <div id='container-nao-basicas'></div>
               </div>
             </div>
           </div>

@@ -1,5 +1,7 @@
 /*
-// Exemplo:
+// Exemplos:
+
+// 1º Caso: Solução Ótima
 const dados = {
     linhas: 4,  // 3 restricoes + 1 (funcao objetivo)
     colunas: 6, // 5 variaveis + 1 (coluna b)
@@ -10,6 +12,35 @@ const dados = {
         [-5.0, -2.0, 0.0, 0.0, 0.0, 0.0]
     ],
     valorZ: null, //esperado: -21
+    textoSolucao: ''
+};
+
+// 2º Caso: Solução Ilimitada
+const dados = {
+    linhas: 4,  // 3 restricoes + 1 (funcao objetivo)
+    colunas: 6, // 5 variaveis + 1 (coluna b)
+    tabela: [
+        [1.0, 1.0, -0.5, 0.0, 0.0, 3.0],
+        [0.0, 2.0, -0.5, 1.0, 0.0, 4.0],
+        [0.0, 1.0, 0.0, 0.0, 1.0, 3.0],
+        [-2.0, -3.0, 0.0, 0.0, 0.0, 0.0]
+    ],
+    valorZ: null, //esperado: não tenha
+    vetorSolucao: null, //esperado: não tenha
+    textoSolucao: ''
+};
+
+// 3º Caso: Infinitas Soluções
+const dados = {
+    linhas: 3,  // 2 restricoes + 1 (funcao objetivo)
+    colunas: 5, // 4 variaveis + 1 (coluna b)
+    tabela: [
+        [-1.0, 1.0, 1.0, 0.0, 1.0],
+        [-1.0, 2.0, 0.0, 1.0, 4.0],
+        [2.0, -4.0, 0.0, 0.0, 0.0]
+    ],
+    valorZ: null, //esperado: -8
+    vetorSolucao: null, //esperado: [2,3]
     textoSolucao: ''
 };
 */
@@ -96,6 +127,38 @@ function preencherDados(){
 }
 
 /*
+Objetivo: Verificar se existem infinitas soluções. Para isso, é preciso verificar
+se ao menos um coeficiente da função objetivo pertencente a uma coluna representada
+por uma variável não básica é nulo.
+Retorno: Boolean.
+*/
+function verificaSeInfinito(){
+
+    for(j = 0; j < dados.colunas-1; j++){
+        eVariavelBasica = false;
+
+        // Verificando se a variável em questão (o índice atual da coluna) não está entre
+        // as variáveis básicas (entre os índices presentes no vetor de variáveis básicas):
+        for(i = 0; i < dados.linhas-1; i++){
+            if(j == dados.vetorBase[i]) {
+                eVariavelBasica = true;
+                break;
+            }
+        }
+
+        if(!eVariavelBasica){
+            // Verificando se o coeficiente da função objetivo na coluna dessa variável não básica
+            // é nulo.
+            if(dados.tabela[dados.linhas-1][j] == 0){
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+/*
 Objetivo: Calcular a solição ótima do PPL pelo método simplex por meio do Tablô
 Retorno: null
 */
@@ -103,14 +166,28 @@ function calcularSolucao(){
 
     preencherDados();
 
-    while(!verificarSeSolucaoOtima()){
+    var concluido = false;
 
+    while(!verificarSeSolucaoOtima()){
         if(!realizaPivoteamento()){
+            dados.textoSolucao = 'Solução ilimitada';
+            concluido = true;
             break;
         }
     }
 
+    if(!concluido){
+        if(verificaSeInfinito()){
+            dados.textoSolucao = 'Soluções Infinitas';
+        } else {
+            dados.textoSolucao = 'Solução Ótima';
+        }
+
+        dados.valorZ = dados.tabela[dados.linhas-1][dados.colunas-1]*(-1);
+    }
+
     exibirResultado();
+
 }
 
 /*
@@ -223,8 +300,9 @@ Objetivo: Exibir na tela a solução encontrada para o P.P.L
 Retorno: null
 */ 
 function exibirResultado(){
-    
+
     document.getElementById('section3').setAttribute('style', 'display: block;')
+    document.getElementById('solucao').setAttribute('style', 'display: block;');
 
     exibirTabelaAtual();
     
@@ -234,6 +312,10 @@ function exibirResultado(){
     var p = document.createElement('p').appendChild(document.createTextNode(dados.textoSolucao));
     div.appendChild(p);
 
+    if(dados.textoSolucao == 'Solução ilimitada'){
+        document.getElementById('solucao').setAttribute('style', 'display: none;');
+        return;
+    }
     //Z
     div = document.getElementById('container-z');
     div.innerHTML = ''; //limpando informacoes anterirores
