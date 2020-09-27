@@ -1,7 +1,7 @@
 /*
 // Exemplos:
 
-1º Caso: Solução Ótima
+// 1º Caso: Solução Ótima
 const dados = {
     linhas: 4,  // 3 restricoes + 1 (funcao objetivo)
     colunas: 6, // 5 variaveis + 1 (coluna b)
@@ -16,6 +16,34 @@ const dados = {
     textoSolucao: ''
 };
 
+// 2º Caso: Solução Ilimitada
+const dados = {
+    linhas: 4,  // 3 restricoes + 1 (funcao objetivo)
+    colunas: 6, // 5 variaveis + 1 (coluna b)
+    tabela: [
+        [1.0, 1.0, -0.5, 0.0, 0.0, 3.0],
+        [0.0, 2.0, -0.5, 1.0, 0.0, 4.0],
+        [0.0, 1.0, 0.0, 0.0, 1.0, 3.0],
+        [-2.0, -3.0, 0.0, 0.0, 0.0, 0.0]
+    ],
+    valorZ: null, //esperado: não tenha
+    vetorSolucao: null, //esperado: não tenha
+    textoSolucao: ''
+};
+
+// 3º Caso: Infinitas Soluções
+const dados = {
+    linhas: 3,  // 2 restricoes + 1 (funcao objetivo)
+    colunas: 5, // 4 variaveis + 1 (coluna b)
+    tabela: [
+        [-1.0, 1.0, 1.0, 0.0, 1.0],
+        [-1.0, 2.0, 0.0, 1.0, 4.0],
+        [2.0, -4.0, 0.0, 0.0, 0.0]
+    ],
+    valorZ: null, //esperado: -8
+    vetorSolucao: null, //esperado: [2,3]
+    textoSolucao: ''
+};
 */
 
 const dados = {
@@ -109,9 +137,9 @@ por uma variável não básica é nulo.
 Retorno: Boolean.
 */
 function verificaSeInfinito(){
-    eVariavelBasica = false;
 
     for(j = 0; j < dados.colunas-1; j++){
+        eVariavelBasica = false;
 
         // Verificando se a variável em questão (o índice atual da coluna) não está entre
         // as variáveis básicas (entre os índices presentes no vetor de variáveis básicas):
@@ -153,7 +181,6 @@ function calcularSolucao(){
     var concluido = false;
 
     while(!verificarSeSolucaoOtima()){
-
         if(!realizaPivoteamento()){
             dados.textoSolucao = 'Solução ilimitada';
             concluido = true;
