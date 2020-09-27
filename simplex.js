@@ -10,7 +10,6 @@ const dados = {
         [-5.0, -2.0, 0.0, 0.0, 0.0, 0.0]
     ],
     valorZ: null, //esperado: -21
-    vetorSolucao: null, //esperado: [3, 3]
     textoSolucao: ''
 };
 */
@@ -21,13 +20,10 @@ const dados = {
     tabela: null, // tablô
     vetorBase: null, // contém os índices das variáveis básicas; tamanho = colunas - linhas
     valorZ: null,
-    vetorSolucao: null, // tamanho = colunas - linhas
     textoSolucao: ''
 };
 
 var colunaDoPivo, linhaDoPivo;
-
-calcularSolucao();
 
 /*
 Objetivo: Exibir na tela o Problema de progrmação linear inserido
@@ -114,7 +110,7 @@ function calcularSolucao(){
         }
     }
 
-    exibirTabelaAtual();
+    exibirResultado();
 }
 
 /*
@@ -227,13 +223,48 @@ Objetivo: Exibir na tela a solução encontrada para o P.P.L
 Retorno: null
 */ 
 function exibirResultado(){
-    //renderizar tablô atual
+    
+    document.getElementById('section3').setAttribute('style', 'display: block;')
+
+    exibirTabelaAtual();
+    
+    //status
+    var div = document.getElementById('container-status');
+    div.innerHTML = ''; //limpando informacoes anterirores
+    var p = document.createElement('p').appendChild(document.createTextNode(dados.textoSolucao));
+    div.appendChild(p);
+
+    //Z
+    div = document.getElementById('container-z');
+    div.innerHTML = ''; //limpando informacoes anterirores
+    p = document.createElement('p').appendChild(document.createTextNode(`Z = ${dados.valorZ}`));
+    div.appendChild(p);
+
+    //variaveis básicas
+    div = document.getElementById('container-basicas');
+    div.innerHTML = ''; //limpando informacoes anterirores
+    for (var i = 0; i < dados.vetorBase.length; i++){
+        p = document.createElement('p').appendChild(document.createTextNode(`x${dados.vetorBase[i]+1} = ${dados.tabela[i][dados.colunas-1]}`));
+        div.appendChild(p);
+        div.appendChild(document.createElement('br'));
+    }
+
+    //variaveis básicas
+    div = document.getElementById('container-nao-basicas');
+    div.innerHTML = ''; //limpando informacoes anterirores
+    for (var i = 0; i < dados.colunas - 1; i++){
+        if(!dados.vetorBase.includes(i)){
+            p = document.createElement('p').appendChild(document.createTextNode(`x${i + 1} = 0`));
+            div.appendChild(p);
+            div.appendChild(document.createElement('br'));
+        }
+
+    }
+
     
 }
 
 function exibirTabelaAtual(){
-
-    document.getElementById('section3').classList.remove('d-none');
 
     const tableHead = document.getElementById('table-head');
     const tableBody = document.getElementById('table-body');
@@ -272,11 +303,7 @@ function exibirTabelaAtual(){
         for (var j = 0; j < dados.tabela[i].length; j++){
 
             const td = document.createElement('td');
-            if(i == dados.linhas - 1 && j == dados.colunas - 1){
-                td.appendChild(document.createTextNode(dados.tabela[i][j]*-1));
-            }else{
-                td.appendChild(document.createTextNode(dados.tabela[i][j]));
-            }
+            td.appendChild(document.createTextNode(dados.tabela[i][j]));
             tr.appendChild(td);
         }
         tableBody.appendChild(tr);
